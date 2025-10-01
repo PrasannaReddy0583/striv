@@ -80,10 +80,15 @@ class _DiscoverPageState extends State<DiscoverPage>
   }
 
   Future<void> fetchFeedItems() async {
+    final String url;
     try {
-      final response = await http.get(
-        Uri.parse("https://dummyjson.com/posts?limit=10"),
-      );
+      if (widget.isInvestor) {
+        url = "https://dummyjson.com/posts?limit=10";
+      } else {
+        url = "https://dummyjson.com/posts?limit=10";
+      }
+
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

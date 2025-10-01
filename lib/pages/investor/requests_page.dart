@@ -202,6 +202,16 @@ class _RequestsPageState extends State<RequestsPage> {
                   ),
                 ),
 
+                // Text(
+                //   description,
+                //   style: TextStyle(
+                //     fontFamily: "Poppins",
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.w400,
+                //     color: Colors.grey.shade800,
+                //   ),
+                // ),
+
                 // Tags
                 Wrap(
                   spacing: 2,
