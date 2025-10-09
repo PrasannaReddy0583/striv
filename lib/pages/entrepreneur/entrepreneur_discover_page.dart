@@ -42,6 +42,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   // ];
 
   List<Map<String, dynamic>> reelsData = [];
+  List<Map<String, dynamic>> feedItems = [];
 
   Future<void> fetchReels() async {
     await Future.delayed(const Duration(seconds: 1)); // simulate network delay
@@ -49,8 +50,6 @@ class _DiscoverPageState extends State<DiscoverPage>
       reelsData = dummyReelsApi; // pretend this came from API
     });
   }
-
-  List<Map<String, dynamic>> feedItems = [];
 
   @override
   void initState() {
@@ -60,28 +59,23 @@ class _DiscoverPageState extends State<DiscoverPage>
     _tabController.addListener(() {
       if (mounted) setState(() {});
     });
-    fetchFeedItems();
+    fetchPosts();
   }
 
-  Future<void> fetchFeedItems() async {
+  Future<void> fetchPosts() async {
     try {
       final response = await http.get(
-        Uri.parse("https://dummyjson.com/posts?limit=10"),
+        Uri.parse(
+          "https://68e74faf10e3f82fbf3e9fac.mockapi.io/delance/post/entrupeneurs/get/posts",
+        ),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
         setState(() {
-          feedItems = (data['posts'] as List).map((post) {
-            return {
-              "startupid": "1",
-              "postid": "post101",
-              "type": "post",
-              "username": "user_${post['userId']}",
-              "imageUrl": "https://picsum.photos/400/300?random=${post['id']}",
-              "caption": post['body'],
-            };
+          feedItems = (data as List).map((post) {
+            return Map<String, dynamic>.from(post);
           }).toList();
 
           isLoading = false;
@@ -228,6 +222,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                             username: i["username"],
                             imageUrl: i["imageUrl"],
                             caption: i["caption"],
+                            likesCount: i["likesCount"],
+                            commentsCount: i["commentsCount"],
                           ),
                         )
                         .toList(),

@@ -21,6 +21,7 @@ class _DiscoverPageState extends State<DiscoverPage>
   late TabController _tabController;
   TextEditingController searchController = TextEditingController();
   bool isLoading = true;
+  bool isLoadingReels = true;
 
   final List<String> filterTabs = ['Projects', 'Posts', 'Reels'];
 
@@ -64,7 +65,7 @@ class _DiscoverPageState extends State<DiscoverPage>
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        debugPrint(data.toString());
+
         setState(() {
           feedItems = (data as List).map((post) {
             return Map<String, dynamic>.from(post);
@@ -81,7 +82,11 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   Future<void> fetchReels() async {
     try {
-      final response = await http.get(Uri.parse("https://your-api.com/reels"));
+      final response = await http.get(
+        Uri.parse(
+          "https://68e74faf10e3f82fbf3e9fac.mockapi.io/delance/post/entrupeneurs/get/reels",
+        ),
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -90,10 +95,13 @@ class _DiscoverPageState extends State<DiscoverPage>
           reelsData = (data as List).map((reel) {
             return Map<String, dynamic>.from(reel);
           }).toList();
+
+          isLoadingReels = false;
         });
       }
     } catch (e) {
       debugPrint("Error fetching reels: $e");
+      setState(() => isLoadingReels = false);
     }
   }
 
@@ -241,6 +249,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                             username: i["username"],
                             imageUrl: i["imageurl"],
                             caption: i["caption"],
+                            likesCount: i["likesCount"],
+                            commentsCount: i["commentsCount"],
                           ),
                         )
                         .toList(),
@@ -252,9 +262,9 @@ class _DiscoverPageState extends State<DiscoverPage>
                         .map(
                           (i) => ReelsWidget(
                             startupid: i["startupid"] ?? "",
-                            startupName: i["startupFullName"] ?? "",
+                            startupName: i["startupName"] ?? "",
                             reelid: i["reelid"] ?? "",
-                            username: i["ownerUsername"] ?? "",
+                            username: i["username"] ?? "",
                             videoUrl: i["videoUrl"] ?? "",
                             caption: i["caption"] ?? "",
                           ),

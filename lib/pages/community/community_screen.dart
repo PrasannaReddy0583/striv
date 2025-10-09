@@ -33,17 +33,12 @@ class CommunityHomeScreen extends StatelessWidget {
             children: [
               // Greeting
               Text(
-                "Hello, Ethan 👋",
+                "Community",
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                "Explore your community today",
-                style: TextStyle(color: Colors.black54, fontSize: 14),
               ),
 
               SizedBox(height: 20),
