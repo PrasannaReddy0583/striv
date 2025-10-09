@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:striv/pages/chats/chats_contacts_page.dart';
 import 'package:striv/pages/community/community_screen.dart';
 import 'package:striv/pages/entrepreneur/home_page.dart';
-import 'package:striv/pages/entrepreneur/pitch_upload/pitch_problem_step1.dart';
+import 'package:striv/pages/entrepreneur/pitch_upload2/pitch_problem_step1.dart';
 import 'package:striv/pages/investor/discover_page.dart';
 import 'package:striv/pages/investor/investor_home_page.dart';
 import 'package:striv/pages/investor/requests_page.dart';
@@ -118,5 +118,5 @@ class _NavigationState extends State<Navigation> {
 }
 
 bool getRoleInvestor() {
-  return true;
+  return false;
 }

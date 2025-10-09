@@ -1,4 +1,5 @@
 class PitchModel {
+  final String pitchid;
   final String companyName;
   final String tagline;
   final String videoUrl;
@@ -9,6 +10,7 @@ class PitchModel {
   final int selectedTabIndex;
 
   PitchModel({
+    required this.pitchid,
     required this.companyName,
     required this.tagline,
     required this.videoUrl,
@@ -30,6 +32,7 @@ class PitchModel {
     int? selectedTabIndex,
   }) {
     return PitchModel(
+      pitchid: pitchid,
       companyName: companyName ?? this.companyName,
       tagline: tagline ?? this.tagline,
       videoUrl: videoUrl ?? this.videoUrl,

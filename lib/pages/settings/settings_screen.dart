@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:striv/pages/settings/app_information_screen.dart';
 import 'package:striv/pages/settings/app_theme.dart';
@@ -68,7 +69,14 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.arrow_back, color: AppColors.heading),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Icon(
+                        CupertinoIcons.back,
+                        color: AppColors.heading,
+                        size: 30,
+                      ),
+                    ),
                     const SizedBox(width: 12),
                     Text("Settings", style: AppTextStyles.pageTitle),
                   ],

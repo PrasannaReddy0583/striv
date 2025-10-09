@@ -157,13 +157,37 @@ class InvestmentsCardWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: scale(context, 15),
                   fontWeight: FontWeight.w600,
-                  color: AppPalette.black,
+                  color: AppPalette.white,
                 ),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class StatColumn extends StatelessWidget {
+  final String number;
+  final String label;
+  const StatColumn({super.key, required this.number, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          number,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: AppColors.titleText,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(label, style: TextStyle(fontSize: 11, color: AppColors.mutedText)),
+      ],
     );
   }
 }

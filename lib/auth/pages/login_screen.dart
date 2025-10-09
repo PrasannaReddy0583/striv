@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:striv/auth/pages/signupscreen.dart';
 import 'package:striv/auth/services/auth_service.dart';
 import 'package:striv/auth/widgets/auth_slider.dart';
 import 'package:striv/constants.dart';
-import 'package:striv/pages/entrepreneur/home_page.dart';
 import 'package:striv/pages/navigation.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -270,8 +270,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         _buildSocialIcon('assets/icons/google.png'),
                         const SizedBox(width: 20),
                         _buildSocialIcon('assets/icons/apple.png'),
-                        const SizedBox(width: 20),
-                        _buildSocialIcon('assets/icons/linkedin.png'),
+                        // const SizedBox(width: 20),
+                        // _buildSocialIcon('assets/icons/linkedin.png'),
                       ],
                     ),
                     SizedBox(height: screenHeight * 0.05),
@@ -309,7 +309,9 @@ class _LoginScreenState extends State<LoginScreen> {
       suffixIcon: isPassword
           ? IconButton(
               icon: Icon(
-                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                _isPasswordVisible
+                    ? CupertinoIcons.eye_fill
+                    : CupertinoIcons.eye_slash_fill,
                 color: Colors.grey.shade600,
               ),
               onPressed: () {

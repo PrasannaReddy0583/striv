@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:striv/pages/investor/search_filters_page.dart';
-import 'package:striv/pages/pitch_details_screen.dart';
 import 'package:striv/utils/app_palette.dart';
 import 'package:striv/widgets/post_widget.dart';
 import 'package:striv/widgets/reels_widget.dart';
@@ -25,82 +24,50 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   final List<String> filterTabs = ['Projects', 'Posts', 'Reels'];
 
-  final sampleReels = [
-    {
-      "videoUrl":
-          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      "caption": "Check out this amazing animation!",
-      "ownerFullName": "Blender Foundation",
-      "ownerUsername": "blender",
-    },
-    {
-      "videoUrl":
-          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-      "caption": "Sintel short film clip",
-      "ownerFullName": "Blender Studio",
-      "ownerUsername": "blenderstudio",
-    },
-  ];
+  List<Map<String, dynamic>> swipeCardPitchData = []; // Projects
+  List<Map<String, dynamic>> feedItems = []; // Posts
+  List<Map<String, dynamic>> reelsData = []; // Reels
 
-  List<Map<String, dynamic>> feedItems = [];
+  Future<void> fetchProjects() async {
+    try {
+      final response = await http.get(
+        Uri.parse("https://your-api.com/projects"),
+      );
 
-  final List<Map<String, dynamic>> pitchData = [
-    {
-      'name': 'Innovate Solutions',
-      'tagline': 'Revolutionizing urban mobility',
-      'videoUrl': '',
-      'overview': {
-        'problem':
-            'Urban commuters face increasing challenges with traffic congestion, limited parking, and environmental concerns.',
-        'solution':
-            'Innovate Solutions offers an integrated platform for shared electric scooters and bikes...',
-        'differentiator':
-            'Our platform stands out with AI-powered route optimization...',
-      },
-      'team': [
-        {'name': 'Alice Johnson', 'role': 'CEO'},
-        {'name': 'Bob Smith', 'role': 'CTO'},
-      ],
-      'market': 'The global micro-mobility market is growing rapidly...',
-      'model': 'Subscription-based + pay-per-ride hybrid...',
-      'traction': '10,000+ users in first 6 months...',
-      'revenue': 'Currently ₹50k MRR...',
-    },
-  ];
+      if (response.statusCode == 200) {
+        final List data = jsonDecode(response.body);
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: filterTabs.length, vsync: this);
-    // 👇 Rebuild whenever tab index changes
-    _tabController.addListener(() {
-      if (mounted) setState(() {});
-    });
-    fetchFeedItems();
+        setState(() {
+          // Expecting each project has "startupid" and "posterImage"
+          swipeCardPitchData = data.map((proj) {
+            return {
+              "startupid": proj["startupid"] ?? "",
+              "posterImage": proj["posterImage"] ?? "",
+            };
+          }).toList();
+        });
+      } else {
+        debugPrint("Error fetching projects: ${response.statusCode}");
+      }
+    } catch (e) {
+      debugPrint("Error fetching projects: $e");
+    }
   }
 
-  Future<void> fetchFeedItems() async {
-    final String url;
+  Future<void> fetchPosts() async {
     try {
-      if (widget.isInvestor) {
-        url = "https://dummyjson.com/posts?limit=10";
-      } else {
-        url = "https://dummyjson.com/posts?limit=10";
-      }
-
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(
+        Uri.parse(
+          "https://68e74faf10e3f82fbf3e9fac.mockapi.io/delance/post/entrupeneurs/get/posts",
+        ),
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
+        debugPrint(data.toString());
         setState(() {
-          feedItems = (data['posts'] as List).map((post) {
-            return {
-              "type": "post",
-              "username": "user_${post['userId']}",
-              "imageUrl": "https://picsum.photos/400/300?random=${post['id']}",
-              "caption": post['body'],
-            };
+          feedItems = (data as List).map((post) {
+            return Map<String, dynamic>.from(post);
           }).toList();
 
           isLoading = false;
@@ -112,6 +79,38 @@ class _DiscoverPageState extends State<DiscoverPage>
     }
   }
 
+  Future<void> fetchReels() async {
+    try {
+      final response = await http.get(Uri.parse("https://your-api.com/reels"));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        setState(() {
+          reelsData = (data as List).map((reel) {
+            return Map<String, dynamic>.from(reel);
+          }).toList();
+        });
+      }
+    } catch (e) {
+      debugPrint("Error fetching reels: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: filterTabs.length, vsync: this);
+    // 👇 Rebuild whenever tab index changes
+    _tabController.addListener(() {
+      if (mounted) setState(() {});
+    });
+    // Fetch all 3 APIs
+    fetchProjects();
+    fetchPosts();
+    fetchReels();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,12 +119,37 @@ class _DiscoverPageState extends State<DiscoverPage>
           return [
             SliverAppBar(
               surfaceTintColor: Colors.transparent,
-              title: const Text(
-                "Discover",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppPalette.textPrimary,
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Discover",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: AppPalette.textPrimary,
+                      ),
+                    ),
+                    CircleAvatar(
+                      radius: 21,
+                      backgroundColor: AppPalette.white,
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => SearchFiltersPage(),
+                          ),
+                        ),
+                        child: Icon(
+                          CupertinoIcons.color_filter,
+                          color: AppPalette.black,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               floating: _tabController.index != 0 ? true : false,
@@ -134,56 +158,34 @@ class _DiscoverPageState extends State<DiscoverPage>
                   ? false
                   : true, // 👈 keeps tabs visible
               backgroundColor: AppPalette.primaryBackground,
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    CupertinoIcons.color_filter,
-                    color: AppPalette.black,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => SearchFiltersPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(90),
+                preferredSize: const Size.fromHeight(100),
                 child: Column(
                   children: [
                     // Search Bar
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 8,
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(60),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            hintText: "Search startups, posts, reels...",
-                            hintStyle: TextStyle(color: Colors.grey[500]),
-                            prefixIcon: const Icon(
-                              CupertinoIcons.search,
-                              color: Colors.grey,
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(14),
+                      child: TextField(
+                        cursorColor: AppPalette.black,
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppPalette.white,
+                          hintText: "Search startups, posts, reels...",
+                          hintStyle: TextStyle(color: AppPalette.black),
+                          prefixIcon: const Icon(
+                            CupertinoIcons.search,
+                            color: AppPalette.black,
                           ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.all(12),
                         ),
                       ),
                     ),
@@ -196,7 +198,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                           : const BouncingScrollPhysics(),
                       labelColor: AppPalette.black,
                       unselectedLabelColor: Colors.grey,
-                      indicatorColor: Colors.greenAccent,
+                      // indicatorColor: Colors.greenAccent,
+                      indicatorColor: AppPalette.black,
                       tabs: filterTabs.map((t) => Tab(text: t)).toList(),
                       indicatorSize: TabBarIndicatorSize.tab,
                     ),
@@ -207,6 +210,66 @@ class _DiscoverPageState extends State<DiscoverPage>
           ];
         },
         body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : TabBarView(
+                controller: _tabController,
+                children: [
+                  // 👉 Projects tab
+                  NotificationListener<OverscrollIndicatorNotification>(
+                    onNotification: (notification) {
+                      notification.disallowIndicator(); // remove glow
+                      return true;
+                    },
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.deferToChild,
+                      onHorizontalDragUpdate: (_) {}, // block swipe
+                      child: TinderCardsWidget(
+                        startups:
+                            swipeCardPitchData, // 🔹 pass API projects here
+                      ),
+                    ),
+                  ),
+
+                  // 👉 Posts tab
+                  ListView(
+                    children: feedItems
+                        .map(
+                          (i) => PostWidget(
+                            postid: i["postid"],
+                            pitchid: i["startupid"],
+                            startupName: i["username"],
+                            username: i["username"],
+                            imageUrl: i["imageurl"],
+                            caption: i["caption"],
+                          ),
+                        )
+                        .toList(),
+                  ),
+
+                  // 👉 Reels tab
+                  ListView(
+                    children: reelsData
+                        .map(
+                          (i) => ReelsWidget(
+                            startupid: i["startupid"] ?? "",
+                            startupName: i["startupFullName"] ?? "",
+                            reelid: i["reelid"] ?? "",
+                            username: i["ownerUsername"] ?? "",
+                            videoUrl: i["videoUrl"] ?? "",
+                            caption: i["caption"] ?? "",
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+}
+
+/*
+body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : TabBarView(
                 controller: _tabController,
@@ -232,13 +295,10 @@ class _DiscoverPageState extends State<DiscoverPage>
                         .where((i) => i["type"] == "post")
                         .map(
                           (i) => GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PitchDetailsScreen(),
-                              ),
-                            ),
+                            onTap: () => PitchDetailsScreen(),
                             child: PostWidget(
+                              postid: i["postid"],
+                              pitchid: i["startupid"],
                               startupName: i["username"],
                               username: i["username"],
                               imageUrl: i["imageUrl"],
@@ -249,19 +309,14 @@ class _DiscoverPageState extends State<DiscoverPage>
                         .toList(),
                   ),
 
-                  // 👉 Reels tab
-                  // Reels tab
-                  // ListView(
-                  //   children: sampleReels
-                  //       .map((reel) => ReelsWidget(reelData: reel))
-                  //       .toList(),
-                  // ),
-                  // Reels tab
+                  // Reels
                   ListView(
                     children: sampleReels
                         .map(
                           (i) => ReelsWidget(
-                            startupName: i["ownerFullName"]!,
+                            startupid: i["startupid"]!,
+                            startupName: i["startupFullName"]!,
+                            reelid: i["reelid"]!,
                             username: i["ownerUsername"]!,
                             videoUrl: i["videoUrl"]!,
                             caption: i["caption"]!,
@@ -270,39 +325,85 @@ class _DiscoverPageState extends State<DiscoverPage>
                         .toList(),
                   ),
                 ],
-              ),
-      ),
-    );
-  }
-}
-
-/*
-ListView(
-                    children: feedItems
-                        .where((i) => i["type"] == "reel")
-                        .map(
-                          (i) => ReelsWidget(
-                            startupName: i["username"],
-                            username: i["username"],
-                            videoUrl: i["videoUrl"],
-                            caption: i["caption"],
-                          ),
-                        )
-                        .toList(),
-                  ),
+              )
  */
+
+// actions: [
+              //   Padding(
+              //     padding: const EdgeInsets.symmetric(
+              //       horizontal: 20.0,
+              //       vertical: 8,
+              //     ),
+              //     child: IconButton(
+              //       icon: const Icon(
+              //         CupertinoIcons.color_filter,
+              //         color: AppPalette.black,
+              //         size: 30,
+              //       ),
+              //       onPressed: () {
+              //         Navigator.push(
+              //           context,
+              //           CupertinoPageRoute(
+              //             builder: (context) => SearchFiltersPage(),
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // ],
 
 
 // ListView(
-                  //   children: feedItems
-                  //       .where((i) => i["type"] == "post")
-                  //       .map(
-                  //         (i) => PostWidget(
-                  //           startupName: i["username"],
-                  //           username: i["username"],
-                  //           imageUrl: i["imageUrl"],
-                  //           caption: i["caption"],
-                  //         ),
-                  //       )
-                  //       .toList(),
+                  //   children: reelsData.isEmpty
+                  //       ? [const Center(child: CircularProgressIndicator())]
+                  //       : reelsData
+                  //             .map(
+                  //               (i) => ReelsWidget(
+                  //                 startupid: i["startupid"] as String,
+                  //                 startupName: i["startupFullName"] as String,
+                  //                 reelid: i["reelid"] as String,
+                  //                 username: i["ownerUsername"] as String,
+                  //                 videoUrl: i["videoUrl"] as String,
+                  //                 caption: i["caption"] as String,
+                  //               ),
+                  //             )
+                  //             .toList(),
                   // ),
+
+
+
+/*  Future<void> fetchFeedItems() async {
+    final String url;
+    try {
+      if (widget.isInvestor) {
+        url = "https://dummyjson.com/posts?limit=10";
+      } else {
+        url = "https://dummyjson.com/posts?limit=10";
+      }
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        setState(() {
+          feedItems = (data['posts'] as List).map((post) {
+            return {
+              "startupid": "1",
+              "postid": "post101",
+              "type": "post",
+              "username": "user_${post['userId']}",
+              "imageUrl": "https://picsum.photos/400/300?random=${post['id']}",
+              "caption": post['body'],
+            };
+          }).toList();
+
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error fetching posts: $e");
+      setState(() => isLoading = false);
+    }
+  }
+ */

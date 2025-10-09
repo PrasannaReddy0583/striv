@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:striv/data/dummy_reels_api.dart';
 import 'package:striv/pages/search_filters_page.dart';
 import 'package:striv/utils/app_palette.dart';
 import 'package:striv/widgets/post_widget.dart';
 import 'package:striv/widgets/reels_widget.dart';
-import 'package:striv/widgets/swipable_cards_widget.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key, required this.isInvestor});
@@ -24,22 +24,31 @@ class _DiscoverPageState extends State<DiscoverPage>
 
   final List<String> filterTabs = ['Projects', 'Posts', 'Reels'];
 
-  final sampleReels = [
-    {
-      "videoUrl":
-          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      "caption": "Check out this amazing animation!",
-      "ownerFullName": "Blender Foundation",
-      "ownerUsername": "blender",
-    },
-    {
-      "videoUrl":
-          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-      "caption": "Sintel short film clip",
-      "ownerFullName": "Blender Studio",
-      "ownerUsername": "blenderstudio",
-    },
-  ];
+  // final sampleReels = [
+  //   {
+  //     "videoUrl":
+  //         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  //     "caption": "Check out this amazing animation!",
+  //     "ownerFullName": "Blender Foundation",
+  //     "ownerUsername": "blender",
+  //   },
+  //   {
+  //     "videoUrl":
+  //         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+  //     "caption": "Sintel short film clip",
+  //     "ownerFullName": "Blender Studio",
+  //     "ownerUsername": "blenderstudio",
+  //   },
+  // ];
+
+  List<Map<String, dynamic>> reelsData = [];
+
+  Future<void> fetchReels() async {
+    await Future.delayed(const Duration(seconds: 1)); // simulate network delay
+    setState(() {
+      reelsData = dummyReelsApi; // pretend this came from API
+    });
+  }
 
   List<Map<String, dynamic>> feedItems = [];
 
@@ -66,6 +75,8 @@ class _DiscoverPageState extends State<DiscoverPage>
         setState(() {
           feedItems = (data['posts'] as List).map((post) {
             return {
+              "startupid": "1",
+              "postid": "post101",
               "type": "post",
               "username": "user_${post['userId']}",
               "imageUrl": "https://picsum.photos/400/300?random=${post['id']}",
@@ -90,12 +101,37 @@ class _DiscoverPageState extends State<DiscoverPage>
           return [
             SliverAppBar(
               surfaceTintColor: Colors.transparent,
-              title: const Text(
-                "Discover",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppPalette.textPrimary,
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Discover",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: AppPalette.textPrimary,
+                      ),
+                    ),
+                    CircleAvatar(
+                      radius: 21,
+                      backgroundColor: AppPalette.white,
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => SearchFiltersPage(),
+                          ),
+                        ),
+                        child: Icon(
+                          CupertinoIcons.color_filter,
+                          color: AppPalette.black,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               floating: _tabController.index != 0 ? true : false,
@@ -104,31 +140,16 @@ class _DiscoverPageState extends State<DiscoverPage>
                   ? false
                   : true, // 👈 keeps tabs visible
               backgroundColor: AppPalette.primaryBackground,
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    CupertinoIcons.color_filter,
-                    color: AppPalette.black,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => SearchFiltersPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(90),
+                preferredSize: const Size.fromHeight(105),
                 child: Column(
                   children: [
                     // Search Bar
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 8,
                       ),
                       child: Container(
                         decoration: BoxDecoration(
@@ -192,7 +213,6 @@ class _DiscoverPageState extends State<DiscoverPage>
                       behavior: HitTestBehavior.deferToChild,
                       onHorizontalDragUpdate:
                           (_) {}, // consume gestures so TabBarView won’t swipe
-                      child: TinderCardsWidget(),
                     ),
                   ),
 
@@ -202,6 +222,8 @@ class _DiscoverPageState extends State<DiscoverPage>
                         .where((i) => i["type"] == "post")
                         .map(
                           (i) => PostWidget(
+                            pitchid: i["startupid"],
+                            postid: i["postid"],
                             startupName: i["username"],
                             username: i["username"],
                             imageUrl: i["imageUrl"],
@@ -212,18 +234,14 @@ class _DiscoverPageState extends State<DiscoverPage>
                   ),
 
                   // 👉 Reels tab
-                  // Reels tab
-                  // ListView(
-                  //   children: sampleReels
-                  //       .map((reel) => ReelsWidget(reelData: reel))
-                  //       .toList(),
-                  // ),
-                  // Reels tab
+                  /*
                   ListView(
                     children: sampleReels
                         .map(
                           (i) => ReelsWidget(
-                            startupName: i["ownerFullName"]!,
+                            startupid: i["startupid"]!,
+                            startupName: i["startupFullName"]!,
+                            reelid: i["reelid"]!,
                             username: i["ownerUsername"]!,
                             videoUrl: i["videoUrl"]!,
                             caption: i["caption"]!,
@@ -231,40 +249,26 @@ class _DiscoverPageState extends State<DiscoverPage>
                         )
                         .toList(),
                   ),
+                  */
+                  ListView(
+                    children: reelsData.isEmpty
+                        ? [const Center(child: CircularProgressIndicator())]
+                        : reelsData
+                              .map(
+                                (i) => ReelsWidget(
+                                  startupid: i["startupid"] as String,
+                                  startupName: i["startupFullName"] as String,
+                                  reelid: i["reelid"] as String,
+                                  username: i["ownerUsername"] as String,
+                                  videoUrl: i["videoUrl"] as String,
+                                  caption: i["caption"] as String,
+                                ),
+                              )
+                              .toList(),
+                  ),
                 ],
               ),
       ),
     );
   }
 }
-
-/*
-ListView(
-                    children: feedItems
-                        .where((i) => i["type"] == "reel")
-                        .map(
-                          (i) => ReelsWidget(
-                            startupName: i["username"],
-                            username: i["username"],
-                            videoUrl: i["videoUrl"],
-                            caption: i["caption"],
-                          ),
-                        )
-                        .toList(),
-                  ),
- */
-
-
-// ListView(
-                  //   children: feedItems
-                  //       .where((i) => i["type"] == "post")
-                  //       .map(
-                  //         (i) => PostWidget(
-                  //           startupName: i["username"],
-                  //           username: i["username"],
-                  //           imageUrl: i["imageUrl"],
-                  //           caption: i["caption"],
-                  //         ),
-                  //       )
-                  //       .toList(),
-                  // ),

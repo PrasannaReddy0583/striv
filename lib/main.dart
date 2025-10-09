@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:striv/onboarding/splash/splash.dart';
+import 'package:striv/auth/pages/login_screen.dart';
 import 'package:striv/utils/app_palette.dart';
-import 'package:striv/pages/navigation.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +28,7 @@ class StrivApp extends StatelessWidget {
         fontFamily: "Poppins",
         scaffoldBackgroundColor: AppPalette.primaryBackground,
       ),
-      home: GradientScaffold(child: SplashScreen()),
+      home: GradientScaffold(child: LoginScreen()),
     );
   }
 }

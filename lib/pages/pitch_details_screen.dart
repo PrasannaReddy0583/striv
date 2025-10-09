@@ -7,7 +7,8 @@ import '../widgets/action_button.dart';
 import 'secure_dataroom.dart';
 
 class PitchDetailsScreen extends StatefulWidget {
-  const PitchDetailsScreen({super.key});
+  final String pitchid;
+  const PitchDetailsScreen({super.key, required this.pitchid});
 
   @override
   State<PitchDetailsScreen> createState() => _PitchDetailsScreenState();
@@ -24,6 +25,7 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
 
   void _initializePitchData() {
     _pitchModel = PitchModel(
+      pitchid: "1",
       companyName: 'Innovate Solutions',
       tagline: 'Revolutionizing urban mobility',
       videoUrl: '',

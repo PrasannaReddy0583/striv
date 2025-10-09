@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:striv/auth/widgets/auth_slider.dart';
-import 'package:striv/auth/widgets/verify_email_dialog.dart';
 import 'package:striv/constants.dart';
 import 'package:striv/core/helpers/account_password_rule.dart';
 import 'package:striv/pages/navigation.dart';

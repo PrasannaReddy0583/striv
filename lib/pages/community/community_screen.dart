@@ -25,136 +25,127 @@ class CommunityHomeScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFFDF5EC), Color(0xFFF5E7DA)],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Greeting
-                Text(
-                  "Hello, Ethan 👋",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Greeting
+              Text(
+                "Hello, Ethan 👋",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
-                SizedBox(height: 4),
-                Text(
-                  "Explore your community today",
-                  style: TextStyle(color: Colors.black54, fontSize: 14),
-                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                "Explore your community today",
+                style: TextStyle(color: Colors.black54, fontSize: 14),
+              ),
 
-                SizedBox(height: 20),
+              SizedBox(height: 20),
 
-                // Quick stats
-                Container(
-                  padding: EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 6,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _StatItem(title: "Members", value: "1.2K"),
-                      _StatItem(title: "Posts Today", value: "45"),
-                      _StatItem(title: "New Resources", value: "8"),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 24),
-
-                // Community Features Grid
-                Expanded(
-                  child: GridView.builder(
-                    itemCount: categories.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
+              // Quick stats
+              Container(
+                padding: EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
                     ),
-                    itemBuilder: (context, index) {
-                      final category = categories[index];
-                      return GestureDetector(
-                        onTap: () {
-                          final title = category["title"] as String;
-                          Widget page;
-                          if (title == "Knowledge Hub") {
-                            page = KnowledgeHubScreen();
-                          } else if (title == "Networking") {
-                            page = NetworkingScreen();
-                          } else if (title == "Recognition") {
-                            page = RecognitionScreen();
-                          } else {
-                            page = DiscussScreen(category: title);
-                          }
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => page),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.95),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 6,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 28,
-                                backgroundColor: (category["color"] as Color)
-                                    .withOpacity(0.2),
-                                child: Icon(
-                                  category["icon"] as IconData,
-                                  size: 30,
-                                  color: category["color"] as Color,
-                                ),
-                              ),
-                              SizedBox(height: 12),
-                              Text(
-                                category["title"] as String,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                  ],
                 ),
-              ],
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _StatItem(title: "Members", value: "1.2K"),
+                    _StatItem(title: "Posts Today", value: "45"),
+                    _StatItem(title: "New Resources", value: "8"),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 24),
+
+              // Community Features Grid
+              Expanded(
+                child: GridView.builder(
+                  itemCount: categories.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+                    return GestureDetector(
+                      onTap: () {
+                        final title = category["title"] as String;
+                        Widget page;
+                        if (title == "Knowledge Hub") {
+                          page = KnowledgeHubScreen();
+                        } else if (title == "Networking") {
+                          page = NetworkingScreen();
+                        } else if (title == "Recognition") {
+                          page = RecognitionScreen();
+                        } else {
+                          page = DiscussScreen(category: title);
+                        }
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => page),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.95),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 28,
+                              backgroundColor: (category["color"] as Color)
+                                  .withOpacity(0.2),
+                              child: Icon(
+                                category["icon"] as IconData,
+                                size: 30,
+                                color: category["color"] as Color,
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                              category["title"] as String,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

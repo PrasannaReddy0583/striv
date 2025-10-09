@@ -66,9 +66,9 @@ class _RequestsPageState extends State<RequestsPage> {
             "Requests",
             style: TextStyle(
               fontFamily: "Poppins",
-              fontSize: 24,
+              fontSize: 25,
               fontWeight: FontWeight.w600,
-              color: Colors.black87,
+              color: Colors.black,
             ),
           ),
         ),
@@ -125,7 +125,7 @@ class _RequestsPageState extends State<RequestsPage> {
             ),
             child: Image.network(
               image,
-              height: MediaQuery.of(context).size.height * 0.50,
+              height: MediaQuery.of(context).size.height * 0.40,
               width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
@@ -230,7 +230,7 @@ class _RequestsPageState extends State<RequestsPage> {
                           ),
                           backgroundColor: AppPalette.primaryBackground,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
+                            borderRadius: BorderRadius.circular(60),
                           ),
                         ),
                       )

@@ -53,21 +53,22 @@ class _ChatsContactsPageState extends State<ChatsContactsPage> {
           children: [
             // Title
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
                     "Chats",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: AppPalette.textPrimary,
                     ),
                   ),
                   CircleAvatar(
+                    radius: 21,
                     backgroundColor: AppPalette.white,
-                    child: Icon(Icons.edit, color: AppPalette.iconColor),
+                    child: Icon(Icons.edit, color: AppPalette.black),
                   ),
                 ],
               ),
@@ -75,7 +76,7 @@ class _ChatsContactsPageState extends State<ChatsContactsPage> {
 
             // Search bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: TextField(
                 decoration: InputDecoration(
                   hintText: "Search",

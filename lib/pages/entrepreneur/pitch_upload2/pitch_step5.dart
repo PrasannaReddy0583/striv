@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Pitch_secure extends StatefulWidget {
-  const Pitch_secure({Key? key}) : super(key: key);
+  final Map<String, Object?> data;
+
+  const Pitch_secure({super.key, required this.data});
 
   @override
   State<Pitch_secure> createState() => _PitchUploadScreenState();
@@ -19,19 +22,18 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xFFFCF4EB),
+      backgroundColor: Color(0xFFFDF5EE),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color(0xFFFCF4EB),
+        backgroundColor: Color(0xFFFDF5EE),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
         title: Text(
           "Pitch Upload",
-          style: TextStyle(
-            fontFamily: "Poppins",
+          style: GoogleFonts.poppins(
             fontSize: screenWidth * 0.045,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -52,9 +54,8 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
                   width: index == 3 ? screenWidth * 0.03 : screenWidth * 0.02,
                   height: index == 3 ? screenWidth * 0.03 : screenWidth * 0.02,
                   decoration: BoxDecoration(
-                    color: index == 3
-                        ? Color(0xFFEFBA8F)
-                        : const Color(0xFFFDF5EE),
+                    color:
+                        index == 3 ? Colors.brown.shade300 : Color(0xFFFDF5EE),
                     shape: BoxShape.circle,
                   ),
                 );
@@ -64,8 +65,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
 
             Text(
               "Security & Privacy Settings",
-              style: TextStyle(
-                fontFamily: "Poppins",
+              style: GoogleFonts.poppins(
                 fontSize: screenWidth * 0.045,
                 fontWeight: FontWeight.w700,
               ),
@@ -75,8 +75,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
             // Pitch Visibility
             Text(
               "Pitch Visibility",
-              style: TextStyle(
-                fontFamily: "Poppins",
+              style: GoogleFonts.poppins(
                 fontSize: screenWidth * 0.035,
                 fontWeight: FontWeight.w600,
               ),
@@ -96,8 +95,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
             // Investor Access Controls
             Text(
               "Investor Access Controls",
-              style: TextStyle(
-                fontFamily: "Poppins",
+              style: GoogleFonts.poppins(
                 fontSize: screenWidth * 0.035,
                 fontWeight: FontWeight.w600,
               ),
@@ -132,8 +130,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
             SizedBox(height: screenHeight * 0.01),
             Text(
               "Note: All decks are automatically watermarked with investor ID and timestamp.",
-              style: TextStyle(
-                fontFamily: "Poppins",
+              style: GoogleFonts.poppins(
                 fontSize: screenWidth * 0.03,
                 color: Colors.black87,
               ),
@@ -143,8 +140,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
             // In-App Features
             Text(
               "In-App Features Overview",
-              style: TextStyle(
-                fontFamily: "Poppins",
+              style: GoogleFonts.poppins(
                 fontSize: screenWidth * 0.045,
                 fontWeight: FontWeight.w700,
               ),
@@ -193,9 +189,8 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
                     onPressed: () => Navigator.pop(context),
                     child: Text(
                       "Back",
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                        color: Colors.brown.shade200,
+                      style: GoogleFonts.poppins(
+                        color: Colors.brown.shade300,
                         fontSize: screenWidth * 0.04,
                       ),
                     ),
@@ -205,7 +200,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFEFBA8F),
+                      backgroundColor: Colors.brown.shade300,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                           screenWidth * 0.075,
@@ -216,12 +211,29 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      final merged = {
+                        ...widget.data,
+                        'securityAndPrivacy': {
+                          'pitchVisibility': _pitchVisibility,
+                          'canDownloadDeck': _canDownloadDeck,
+                          'canRequestDataRoom': _canRequestDataRoom,
+                        },
+                      };
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Pitch submitted successfully!",
+                            style: GoogleFonts.poppins(),
+                          ),
+                        ),
+                      );
+
+                      print("Final Pitch Data: $merged");
                     },
                     child: Text(
                       "Submit Pitch",
-                      style: TextStyle(
-                        color: Colors.black,
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
                         fontSize: screenWidth * 0.04,
                       ),
                     ),
@@ -239,7 +251,10 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
 
   Widget _buildChoiceChip(String label, double screenWidth) {
     return ChoiceChip(
-      label: Text(label, style: TextStyle(fontSize: screenWidth * 0.035)),
+      label: Text(
+        label,
+        style: GoogleFonts.poppins(fontSize: screenWidth * 0.035),
+      ),
       selected: _pitchVisibility == label,
       onSelected: (selected) {
         if (selected) {
@@ -248,14 +263,15 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
           });
         }
       },
-      selectedColor: Color(0xFFEFBA8F),
-      labelStyle: TextStyle(
-        color: _pitchVisibility == label
-            ? Colors.white
-            : const Color(0xFFEFBA8F),
+      selectedColor: Colors.brown.shade300,
+      labelStyle: GoogleFonts.poppins(
+        color:
+            _pitchVisibility == label
+                ? Colors.white
+                : Colors.brown.shade300,
         fontSize: screenWidth * 0.035,
       ),
-      backgroundColor: const Color(0xFFFDF5EE),
+      backgroundColor: Color(0xFFFDF5EE),
     );
   }
 
@@ -275,27 +291,23 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(screenWidth * 0.035),
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: Colors.brown.shade200, width: 1),
       ),
       child: SwitchListTile(
         title: Text(
           title,
-          style: TextStyle(
-            fontFamily: "Poppins",
+          style: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
             fontSize: screenWidth * 0.04,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: TextStyle(
-            fontFamily: "Poppins",
-            fontSize: screenWidth * 0.035,
-          ),
+          style: GoogleFonts.poppins(fontSize: screenWidth * 0.035),
         ),
         value: value,
         onChanged: onChanged,
-        activeColor: const Color.fromARGB(255, 100, 88, 64),
+        activeColor: Colors.brown.shade300,
       ),
     );
   }
@@ -311,15 +323,14 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(screenWidth * 0.035),
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: Colors.brown.shade200,width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontFamily: "Poppins",
+            style: GoogleFonts.poppins(
               fontWeight: FontWeight.w600,
               fontSize: screenWidth * 0.035,
             ),
@@ -327,8 +338,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
           SizedBox(height: screenHeight * 0.0075),
           Text(
             subtitle,
-            style: TextStyle(
-              fontFamily: "Poppins",
+            style: GoogleFonts.poppins(
               fontSize: screenWidth * 0.0325,
               color: Colors.black54,
             ),

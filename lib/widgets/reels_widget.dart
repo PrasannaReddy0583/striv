@@ -4,14 +4,18 @@ import 'package:striv/pages/investor/full_screen_reel_page.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelsWidget extends StatefulWidget {
+  final String startupid;
   final String startupName;
+  final String reelid;
   final String username;
   final String videoUrl;
   final String caption;
 
   const ReelsWidget({
     super.key,
+    required this.startupid,
     required this.startupName,
+    required this.reelid,
     required this.username,
     required this.videoUrl,
     required this.caption,
@@ -62,12 +66,15 @@ class _ReelsWidgetState extends State<ReelsWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.startupName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: "Poppins",
+                  GestureDetector(
+                    onTap: () => widget.startupid,
+                    child: Text(
+                      widget.startupName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontFamily: "Poppins",
+                      ),
                     ),
                   ),
                   Text(
@@ -99,9 +106,11 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                 builder: (_) => FullScreenReelPage(
                   reels: [
                     {
-                      "videoUrl": widget.videoUrl,
+                      "startupid": widget.startupid,
                       "startupName": widget.startupName,
                       "username": widget.username,
+                      "reelid": widget.reelid,
+                      "videoUrl": widget.videoUrl,
                       "caption": widget.caption,
                     },
                   ],

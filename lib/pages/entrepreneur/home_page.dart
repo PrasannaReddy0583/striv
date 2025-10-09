@@ -323,7 +323,7 @@ class PitchCard extends StatelessWidget {
               child: Text(
                 'View Pitch Analytics',
                 style: TextStyle(
-                  color: AppPalette.black,
+                  color: AppPalette.white,
                   fontSize: scale(context, 15),
                   fontWeight: FontWeight.w600,
                 ),

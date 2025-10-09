@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:striv/pages/pitch_details_screen.dart';
 
 class PostWidget extends StatelessWidget {
+  final String pitchid;
+  final String postid;
   final String startupName;
   final String username;
   final String imageUrl;
@@ -9,6 +12,8 @@ class PostWidget extends StatelessWidget {
 
   const PostWidget({
     super.key,
+    required this.pitchid,
+    required this.postid,
     required this.startupName,
     required this.username,
     required this.imageUrl,
@@ -36,12 +41,21 @@ class PostWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    startupName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      fontFamily: "Poppins",
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) =>
+                            PitchDetailsScreen(pitchid: pitchid),
+                      ),
+                    ),
+                    child: Text(
+                      startupName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontFamily: "Poppins",
+                      ),
                     ),
                   ),
                   Text(
