@@ -58,7 +58,7 @@ class _NavigationState extends State<Navigation> {
       value: const SystemUiOverlayStyle(
         systemNavigationBarColor: AppPalette.background,
         systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarColor: Colors.white,
+        statusBarColor: Colors.transparent,
         statusBarBrightness: Brightness.light,
       ),
       child: Scaffold(

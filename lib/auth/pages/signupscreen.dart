@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:striv/auth/services/auth_service.dart';
 import 'package:striv/auth/widgets/auth_slider.dart';
+import 'package:striv/auth/widgets/verify_email_dialog.dart';
 import 'package:striv/constants.dart';
 import 'package:striv/core/helpers/account_password_rule.dart';
+import 'package:striv/pages/investor/investor_home_page.dart';
 import 'package:striv/pages/navigation.dart';
 import 'package:striv/terms_and_conditions.dart';
+import 'package:striv/utils/app_palette.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -24,11 +28,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(const AssetImage(AssetPaths.splashbg), context);
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   precacheImage(const AssetImage(AssetPaths.splashbg), context);
+  // }
 
   bool _isPasswordValid() {
     final value = _passwordController.text;
@@ -44,12 +48,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AssetPaths.splashbg),
-            fit: BoxFit.cover,
-          ),
-        ),
+        color: AppPalette.background,
+        // decoration: const BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage(AssetPaths.splashbg),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -214,9 +219,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            // MaterialPageRoute<void> has been used before
                             Navigator.push(
                               context,
-                              MaterialPageRoute<void>(
+                              CupertinoPageRoute(
                                 builder: (context) =>
                                     const TermsAndConditionsScreen(),
                               ),
@@ -248,52 +254,54 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             !_agreedToTerms) {
                           return;
                         }
-                        // await Future.delayed(const Duration(milliseconds: 300));
-                        // showDialog(
-                        //   context: context,
-                        //   barrierDismissible: false,
-                        //   builder: (context) =>
-                        //       VerifyEmailDialog(email: _emailController.text),
-                        // );
+                        await Future.delayed(const Duration(milliseconds: 300));
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) =>
+                              VerifyEmailDialog(email: _emailController.text),
+                        );
 
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           CupertinoPageRoute(
                             builder: (context) => Navigation(),
                           ),
+                          (Route<dynamic> route) => false,
                         );
 
-                        // try {
-                        //   await AuthService().signup(
-                        //     _nameController.text,
-                        //     _emailController.text,
-                        //     _passwordController.text,
-                        //   );
+                        try {
+                          await AuthService().signup(
+                            _nameController.text,
+                            _emailController.text,
+                            _passwordController.text,
+                          );
 
-                        //   if (!mounted) return;
+                          if (!mounted) return;
 
-                        //   Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute<void>(
-                        //       builder: (context) => const HomeScreen(),
-                        //     ),
-                        //   );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  const InvestorHomePage(isInvestor: true),
+                            ),
+                          );
 
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(
-                        //       content: Text("Account created successfully!"),
-                        //       duration: Duration(seconds: 2),
-                        //     ),
-                        //   );
-                        // } catch (e) {
-                        //   if (!mounted) return;
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //     SnackBar(
-                        //       content: Text(e.toString()),
-                        //       duration: const Duration(seconds: 3),
-                        //     ),
-                        //   );
-                        // }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Account created successfully!"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        } catch (e) {
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(e.toString()),
+                              duration: const Duration(seconds: 3),
+                            ),
+                          );
+                        }
                       },
                     ),
 

@@ -65,7 +65,9 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       name: json['name'] ?? 'User',
-      avatarUrl: json['avatarUrl'] ?? 'https://i.pravatar.cc/300?img=47',
+      avatarUrl:
+          json['avatarUrl'] ??
+          'https://plus.unsplash.com/premium_photo-1661432963180-11f554ff1ced?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     );
   }
 }
@@ -223,7 +225,8 @@ class _InvestorHomePageState extends State<InvestorHomePage> {
                     if (snapshot.hasError || !snapshot.hasData) {
                       return HeaderSection(
                         userName: 'User',
-                        avatarUrl: 'https://i.pravatar.cc/300?img=47',
+                        avatarUrl:
+                            'https://plus.unsplash.com/premium_photo-1661432963180-11f554ff1ced?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                       );
                     }
                     return HeaderSection(
@@ -787,7 +790,7 @@ class EntrepreneurHomeMatchsSuggestionTile extends StatelessWidget {
               onPressed: onConnect,
               style: OutlinedButton.styleFrom(
                 backgroundColor: AppColors.background,
-                side: BorderSide(color: Colors.black),
+                side: BorderSide(color: AppPalette.messageColor),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(scale(context, 10)),
                 ),
@@ -796,7 +799,7 @@ class EntrepreneurHomeMatchsSuggestionTile extends StatelessWidget {
               child: Text(
                 'Connect',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: AppPalette.messageColor,
                   fontWeight: FontWeight.w700,
                   fontSize: scale(context, 12),
                 ),

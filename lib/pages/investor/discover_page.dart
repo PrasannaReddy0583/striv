@@ -23,7 +23,9 @@ class _DiscoverPageState extends State<DiscoverPage>
   bool isLoading = true;
   bool isLoadingReels = true;
 
-  final List<String> filterTabs = ['Projects', 'Posts', 'Reels'];
+  // instead of posters intially it is called projects in discover tabs
+
+  final List<String> filterTabs = ['Projects', 'Posts', 'Reels', 'Videos'];
 
   List<Map<String, dynamic>> swipeCardPitchData = []; // Projects
   List<Map<String, dynamic>> feedItems = []; // Posts
@@ -140,26 +142,29 @@ class _DiscoverPageState extends State<DiscoverPage>
                         color: AppPalette.textPrimary,
                       ),
                     ),
-                    CircleAvatar(
-                      radius: 21,
-                      backgroundColor: AppPalette.white,
-                      child: GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => SearchFiltersPage(),
-                          ),
-                        ),
-                        child: Icon(
-                          CupertinoIcons.color_filter,
-                          color: AppPalette.black,
-                          size: 30,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
+              actions: [
+                Icon(CupertinoIcons.search, color: Colors.black, size: 34),
+                SizedBox(width: 16),
+                Padding(
+                  padding: EdgeInsetsGeometry.only(right: 16),
+                  child: InkWell(
+                    onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => SearchFiltersPage(),
+                      ),
+                    ),
+                    child: Icon(
+                      CupertinoIcons.color_filter,
+                      color: AppPalette.black,
+                      size: 36,
+                    ),
+                  ),
+                ),
+              ],
               floating: _tabController.index != 0 ? true : false,
               snap: _tabController.index != 0 ? true : false,
               pinned: _tabController.index != 0
@@ -167,36 +172,36 @@ class _DiscoverPageState extends State<DiscoverPage>
                   : true, // 👈 keeps tabs visible
               backgroundColor: AppPalette.primaryBackground,
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(100),
+                preferredSize: const Size.fromHeight(30),
                 child: Column(
                   children: [
                     // Search Bar
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        top: 8,
-                      ),
-                      child: TextField(
-                        cursorColor: AppPalette.black,
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppPalette.white,
-                          hintText: "Search startups, posts, reels...",
-                          hintStyle: TextStyle(color: AppPalette.black),
-                          prefixIcon: const Icon(
-                            CupertinoIcons.search,
-                            color: AppPalette.black,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.all(12),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(
+                    //     left: 16,
+                    //     right: 16,
+                    //     top: 8,
+                    //   ),
+                    //   child: TextField(
+                    //     cursorColor: AppPalette.black,
+                    //     controller: searchController,
+                    //     decoration: InputDecoration(
+                    //       filled: true,
+                    //       fillColor: AppPalette.white,
+                    //       hintText: "Search startups, posts, reels...",
+                    //       hintStyle: TextStyle(color: AppPalette.black),
+                    //       prefixIcon: const Icon(
+                    //         CupertinoIcons.search,
+                    //         color: AppPalette.black,
+                    //       ),
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(30),
+                    //         borderSide: BorderSide.none,
+                    //       ),
+                    //       contentPadding: const EdgeInsets.all(12),
+                    //     ),
+                    //   ),
+                    // ),
 
                     // Tabs
                     TabBar(
@@ -271,149 +276,26 @@ class _DiscoverPageState extends State<DiscoverPage>
                         )
                         .toList(),
                   ),
+
+                  ListView(
+                    children: feedItems
+                        .map(
+                          (i) => PostWidget(
+                            postid: i["postid"],
+                            pitchid: i["startupid"],
+                            startupName: i["username"],
+                            username: i["username"],
+                            imageUrl: i["imageurl"],
+                            caption: i["caption"],
+                            likesCount: i["likesCount"],
+                            commentsCount: i["commentsCount"],
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ],
               ),
       ),
     );
   }
 }
-
-/*
-body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : TabBarView(
-                controller: _tabController,
-                children: [
-                  // 👉 All (swipes)
-                  // Projects tab
-                  NotificationListener<OverscrollIndicatorNotification>(
-                    onNotification: (notification) {
-                      notification.disallowIndicator(); // remove glow
-                      return true;
-                    },
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.deferToChild,
-                      onHorizontalDragUpdate:
-                          (_) {}, // consume gestures so TabBarView won’t swipe
-                      child: TinderCardsWidget(),
-                    ),
-                  ),
-
-                  // 👉 Posts tab
-                  ListView(
-                    children: feedItems
-                        .where((i) => i["type"] == "post")
-                        .map(
-                          (i) => GestureDetector(
-                            onTap: () => PitchDetailsScreen(),
-                            child: PostWidget(
-                              postid: i["postid"],
-                              pitchid: i["startupid"],
-                              startupName: i["username"],
-                              username: i["username"],
-                              imageUrl: i["imageUrl"],
-                              caption: i["caption"],
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-
-                  // Reels
-                  ListView(
-                    children: sampleReels
-                        .map(
-                          (i) => ReelsWidget(
-                            startupid: i["startupid"]!,
-                            startupName: i["startupFullName"]!,
-                            reelid: i["reelid"]!,
-                            username: i["ownerUsername"]!,
-                            videoUrl: i["videoUrl"]!,
-                            caption: i["caption"]!,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ],
-              )
- */
-
-// actions: [
-              //   Padding(
-              //     padding: const EdgeInsets.symmetric(
-              //       horizontal: 20.0,
-              //       vertical: 8,
-              //     ),
-              //     child: IconButton(
-              //       icon: const Icon(
-              //         CupertinoIcons.color_filter,
-              //         color: AppPalette.black,
-              //         size: 30,
-              //       ),
-              //       onPressed: () {
-              //         Navigator.push(
-              //           context,
-              //           CupertinoPageRoute(
-              //             builder: (context) => SearchFiltersPage(),
-              //           ),
-              //         );
-              //       },
-              //     ),
-              //   ),
-              // ],
-
-
-// ListView(
-                  //   children: reelsData.isEmpty
-                  //       ? [const Center(child: CircularProgressIndicator())]
-                  //       : reelsData
-                  //             .map(
-                  //               (i) => ReelsWidget(
-                  //                 startupid: i["startupid"] as String,
-                  //                 startupName: i["startupFullName"] as String,
-                  //                 reelid: i["reelid"] as String,
-                  //                 username: i["ownerUsername"] as String,
-                  //                 videoUrl: i["videoUrl"] as String,
-                  //                 caption: i["caption"] as String,
-                  //               ),
-                  //             )
-                  //             .toList(),
-                  // ),
-
-
-
-/*  Future<void> fetchFeedItems() async {
-    final String url;
-    try {
-      if (widget.isInvestor) {
-        url = "https://dummyjson.com/posts?limit=10";
-      } else {
-        url = "https://dummyjson.com/posts?limit=10";
-      }
-
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        setState(() {
-          feedItems = (data['posts'] as List).map((post) {
-            return {
-              "startupid": "1",
-              "postid": "post101",
-              "type": "post",
-              "username": "user_${post['userId']}",
-              "imageUrl": "https://picsum.photos/400/300?random=${post['id']}",
-              "caption": post['body'],
-            };
-          }).toList();
-
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      debugPrint("Error fetching posts: $e");
-      setState(() => isLoading = false);
-    }
-  }
- */

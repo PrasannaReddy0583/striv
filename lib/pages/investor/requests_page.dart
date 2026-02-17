@@ -9,7 +9,7 @@ class RequestsPage extends StatefulWidget {
 }
 
 class _RequestsPageState extends State<RequestsPage> {
-  int _selectedIndex = 1;
+  // int _selectedIndex = 1;
 
   final List<Map<String, dynamic>> startUps = [
     {
@@ -47,11 +47,13 @@ class _RequestsPageState extends State<RequestsPage> {
     },
   ];
 
+  /*
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+  */
 
   @override
   Widget build(BuildContext context) {

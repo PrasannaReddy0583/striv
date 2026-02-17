@@ -237,7 +237,6 @@ class _NotificationCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   _NotificationCard({
-    super.key,
     required this.item,
     required this.cardColor,
     required this.titleColor,

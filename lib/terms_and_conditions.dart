@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:striv/utils/app_theme.dart';
 
@@ -8,6 +9,12 @@ class TermsAndConditionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        surfaceTintColor: Colors.transparent,
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Icon(CupertinoIcons.back),
+        ),
         title: Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(

@@ -1,34 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/services.dart';
-import 'package:striv/auth/pages/login_screen.dart';
+import 'dart:io';
+
+import 'package:striv/onboarding/splash/splash.dart';
 import 'package:striv/utils/app_palette.dart';
 
+// Testing changes
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      systemNavigationBarColor: AppPalette.background,
+      systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.white,
+      statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.light,
     ),
   );
-  runApp(StrivApp());
+
+  runApp(
+    (kIsWeb || Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+        ? DevicePreview(enabled: true, builder: (context) => const StrivApp())
+        : const StrivApp(),
+  );
 }
 
 class StrivApp extends StatelessWidget {
   const StrivApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Dealence',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Poppins",
         scaffoldBackgroundColor: AppPalette.primaryBackground,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.black,
+          selectionColor: Colors.grey,
+          selectionHandleColor: Colors.black,
+        ),
+        useMaterial3: false,
       ),
-      home: GradientScaffold(child: LoginScreen()),
+      home: GradientScaffold(child: SplashScreen()),
     );
   }
 }
@@ -40,7 +56,6 @@ class GradientScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,

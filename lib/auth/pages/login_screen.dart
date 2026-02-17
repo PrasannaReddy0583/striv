@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:striv/auth/pages/signupscreen.dart';
 import 'package:striv/auth/services/auth_service.dart';
 import 'package:striv/auth/widgets/auth_slider.dart';
 import 'package:striv/constants.dart';
 import 'package:striv/pages/navigation.dart';
+import 'package:striv/utils/app_palette.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,251 +33,257 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/splash_bg.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Form(
-                key: _formKey,
-                autovalidateMode: _submitted
-                    ? AutovalidateMode.onUserInteraction
-                    : AutovalidateMode.disabled,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(height: screenHeight * 0.05),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Color.fromARGB(0, 0, 0, 0),
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(color: AppPalette.background),
+          child: SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: _submitted
+                      ? AutovalidateMode.onUserInteraction
+                      : AutovalidateMode.disabled,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: screenHeight * 0.05),
 
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFEADFD3),
-                        border: Border.all(
-                          color: const Color(0xFFD3C3B3),
-                          width: 1.5,
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFFEADFD3),
+                          border: Border.all(
+                            color: const Color(0xFFD3C3B3),
+                            width: 1.5,
+                          ),
                         ),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.shield_outlined,
-                          color: Color(0xFFB59D82),
-                          size: 40,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    Text(
-                      TextStrings.loginTitle,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Revalia',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF3D3D3D),
-                      ),
-                    ),
-                    const SizedBox(height: 28),
-
-                    Text(
-                      TextStrings.loginSubTitle,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-
-                    TextFormField(
-                      controller: _emailController,
-                      autofocus: false,
-                      cursorColor: Colors.black,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: _buildInputDecoration('Email Address'),
-                      style: TextStyle(fontFamily: "Poppins", fontSize: 14),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!RegExp(
-                          r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$',
-                        ).hasMatch(value)) {
-                          return 'Enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    TextFormField(
-                      controller: _passwordController,
-                      autofocus: false,
-                      cursorColor: Colors.black,
-                      obscureText: !_isPasswordVisible,
-                      decoration: _buildInputDecoration(
-                        'Password',
-                        isPassword: true,
-                      ),
-                      style: TextStyle(fontFamily: "Poppins", fontSize: 14),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        if (value.length < 8) {
-                          return 'Password must be at least 8 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            color: const Color(0xFF3D3D3D),
-                            fontWeight: FontWeight.w500,
+                        child: const Center(
+                          child: Icon(
+                            Icons.shield_outlined,
+                            color: Color(0xFFB59D82),
+                            size: 40,
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 14),
+                      const SizedBox(height: 24),
 
-                    SlideButton(
-                      text: "\t\tLogin",
-                      enabled: true,
-                      onSlideComplete: () async {
-                        setState(() => _submitted = true);
+                      Text(
+                        TextStrings.loginTitle,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Revalia',
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF3D3D3D),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
 
-                        if (_formKey.currentState?.validate() != true) {
-                          return;
-                        }
+                      Text(
+                        TextStrings.loginSubTitle,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 32),
 
-                        try {
-                          final success = await AuthService().login(
-                            _emailController.text,
-                            _passwordController.text,
-                          );
-
-                          if (!mounted) return;
-
-                          if (success.isNotEmpty) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const Navigation(),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Invalid email or password"),
-                              ),
-                            );
+                      TextFormField(
+                        controller: _emailController,
+                        autofocus: false,
+                        cursorColor: Colors.black,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: _buildInputDecoration('Email Address'),
+                        style: TextStyle(fontFamily: "Poppins", fontSize: 14),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
                           }
-                        } catch (e) {
-                          if (!mounted) return;
-                          ScaffoldMessenger.of(
-                            context,
-                          ).showSnackBar(SnackBar(content: Text("$e")));
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 24),
+                          if (!RegExp(
+                            r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$',
+                          ).hasMatch(value)) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Don't have an account? ",
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Colors.black54,
-                          ),
+                      TextFormField(
+                        controller: _passwordController,
+                        autofocus: false,
+                        cursorColor: Colors.black,
+                        obscureText: !_isPasswordVisible,
+                        decoration: _buildInputDecoration(
+                          'Password',
+                          isPassword: true,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        const CreateAccountScreen(),
-                                transitionsBuilder:
-                                    (
-                                      context,
-                                      animation,
-                                      secondaryAnimation,
-                                      child,
-                                    ) {
-                                      return FadeTransition(
-                                        opacity: animation,
-                                        child: child,
-                                      );
-                                    },
-                                transitionDuration: const Duration(
-                                  milliseconds: 400,
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Create One',
+                        style: TextStyle(fontFamily: "Poppins", fontSize: 14),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          if (value.length < 8) {
+                            return 'Password must be at least 8 characters';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 12),
+
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Forgot Password?',
                             style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins",
+                              color: const Color(0xFF3D3D3D),
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
+                      ),
+                      const SizedBox(height: 14),
 
-                    Row(
-                      children: const [
-                        Expanded(child: Divider(color: Colors.grey)),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            'or continue with',
-                            style: TextStyle(color: Colors.black54),
+                      SlideButton(
+                        text: "\t\tLogin",
+                        enabled: true,
+                        onSlideComplete: () async {
+                          setState(() => _submitted = true);
+
+                          if (_formKey.currentState?.validate() != true) {
+                            return;
+                          }
+
+                          try {
+                            final success = await AuthService().login(
+                              _emailController.text,
+                              _passwordController.text,
+                            );
+
+                            if (!mounted) return;
+
+                            if (success.isNotEmpty) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const Navigation(),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Invalid email or password"),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text("$e")));
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 24),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Don't have an account? ",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.black54,
+                            ),
                           ),
-                        ),
-                        Expanded(child: Divider(color: Colors.grey)),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                      ) => const CreateAccountScreen(),
+                                  transitionsBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                        child,
+                                      ) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        );
+                                      },
+                                  transitionDuration: const Duration(
+                                    milliseconds: 400,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Create One',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.05),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildSocialIcon('assets/icons/google.png'),
-                        const SizedBox(width: 20),
-                        _buildSocialIcon('assets/icons/apple.png'),
-                        // const SizedBox(width: 20),
-                        // _buildSocialIcon('assets/icons/linkedin.png'),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.05),
-                  ],
+                      Row(
+                        children: const [
+                          Expanded(child: Divider(color: Colors.grey)),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              'or continue with',
+                              style: TextStyle(color: Colors.black54),
+                            ),
+                          ),
+                          Expanded(child: Divider(color: Colors.grey)),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildSocialIcon('assets/icons/google.png'),
+                          const SizedBox(width: 20),
+                          _buildSocialIcon('assets/icons/apple.png'),
+                          // const SizedBox(width: 20),
+                          // _buildSocialIcon('assets/icons/linkedin.png'),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.05),
+                    ],
+                  ),
                 ),
               ),
             ),

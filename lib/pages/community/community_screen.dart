@@ -13,7 +13,7 @@ class CommunityHomeScreen extends StatelessWidget {
       {"title": "Discuss", "icon": Icons.forum, "color": Color(0xFFEFBA8F)},
       {
         "title": "Knowledge Hub",
-        "icon": Icons.menu_book,
+        "icon": Icons.book_online,
         "color": Color(0xFFEFBA8F),
       },
       {"title": "Networking", "icon": Icons.people, "color": Color(0xFFEFBA8F)},

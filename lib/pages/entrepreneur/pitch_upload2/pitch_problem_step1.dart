@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:striv/pages/entrepreneur/pitch_upload2/pitch_step2_upload.dart';
+import 'package:striv/utils/app_palette.dart';
 
 class ProblemSolutionForm extends StatefulWidget {
   const ProblemSolutionForm({super.key});
@@ -184,11 +186,12 @@ class _ProblemSolutionFormState extends State<ProblemSolutionForm> {
     return Scaffold(
       backgroundColor: Color(0xFFFDF5EE),
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Color(0xFFFDF5EE),
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+        leading: InkWell(
+            onTap: ()=> Navigator.pop(context),
+            child: Icon(CupertinoIcons.back, color: AppPalette.black)
         ),
         title: Text(
           "Problem & Solution",
@@ -204,144 +207,147 @@ class _ProblemSolutionFormState extends State<ProblemSolutionForm> {
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
-            children: [
-              // Role Selection
-              Text(
-                "What is your role?",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 12),
-              Column(
-                children: [
-                  RadioListTile<String>(
-                    title: Text("A"),
-                    value: "A",
-                    groupValue: _selectedRole,
-                    onChanged: (value) {
-                      setState(() => _selectedRole = value);
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: Text("B"),
-                    value: "B",
-                    groupValue: _selectedRole,
-                    onChanged: (value) {
-                      setState(() => _selectedRole = value);
-                    },
-                  ),
-                  RadioListTile<String>(
-                    title: Text("C"),
-                    value: "C",
-                    groupValue: _selectedRole,
-                    onChanged: (value) {
-                      setState(() => _selectedRole = value);
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-
-              // One-liner
-              Text(
-                "1-Liner Problem Statement",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 6),
-              _buildTextFormField(
-                controller: _oneLinerController,
-                hint: "Briefly describe the problem",
-              ),
-
-              // Detailed Problem
-              Text(
-                "Detailed Problem",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 6),
-              _buildTextFormField(
-                controller: _detailedProblemController,
-                hint: "Provide a comprehensive description of the problem",
-                maxLines: 5,
-              ),
-
-              // Evidence Upload
-              _uploadBox(
-                label: "Evidence of Problem",
-                hint: "Upload market research, user feedback, etc.",
-                icon: Icons.cloud_upload_outlined,
-                fileName: _evidenceFile,
-                onTap: () => _pickFile("evidence"),
-              ),
-
-              // Product Description
-              Text(
-                "Product Description",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 6),
-              _buildTextFormField(
-                controller: _productDescriptionController,
-                hint: "Describe your product or solution",
-                maxLines: 4,
-              ),
-
-              SizedBox(height: 30),
-
-              // Pitch Deck & Video Pitch
-              _uploadBox(
-                label: "Pitch Deck (PDF/PPT)",
-                hint: "Tap to upload your Pitch Deck",
-                icon: Icons.insert_drive_file_outlined,
-                fileName: _pitchDeckFile,
-                onTap: () => _pickFile("pitchDeck"),
-              ),
-              _uploadBox(
-                label: "Video Pitch (MP4)",
-                hint: "Tap to upload your Video Pitch",
-                icon: Icons.play_circle_outline,
-                fileName: _videoPitchFile,
-                onTap: () => _pickFile("videoPitch"),
-              ),
-
-              // Company Details
-              _uploadBox(
-                label: "Company Logo (PNG/JPG)",
-                hint: "Tap to upload your Logo",
-                icon: Icons.insert_drive_file_outlined,
-                fileName: _logo,
-                onTap: () => _pickFile("logo"),
-              ),
-              Text(
-                "Company Name",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 12),
-              _buildTextFormField(
-                controller: _companyNameController,
-                hint: "Company Name",
-              ),
-              SizedBox(height: 12),
-              Text(
-                "Company TagLine",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 12),
-              _buildTextFormField(
-                controller: _companyTaglineController,
-                hint: "Company Tagline",
-              ),
-              SizedBox(height: 12),
-              _uploadBox(
-                label: "Company visit Card",
-                hint: "Tap to upload your Card",
-                icon: Icons.insert_drive_file_outlined,
-                fileName: _card,
-                onTap: () => _pickFile("Card"),
-              ),
-
-              SizedBox(height: 80),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 6,
+              children: [
+                // Role Selection
+                Text(
+                  "What is your role?",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+            
+                Column(
+                  children: [
+                    RadioListTile<String>(
+                      title: Text("Patentable Product / Idea"),
+                      value: "PP",
+                      groupValue: _selectedRole,
+                      onChanged: (value) {
+                        setState(() => _selectedRole = value);
+                      },
+                    ),
+                    RadioListTile<String>(
+                      title: Text("StartUp (Not really Patentable)"),
+                      value: "ST",
+                      groupValue: _selectedRole,
+                      onChanged: (value) {
+                        setState(() => _selectedRole = value);
+                      },
+                    ),
+                    RadioListTile<String>(
+                      title: Text("Regular Business"),
+                      value: "RB",
+                      groupValue: _selectedRole,
+                      onChanged: (value) {
+                        setState(() => _selectedRole = value);
+                      },
+                    ),
+                  ],
+                ),
+            
+                // One-liner
+                Text(
+                  "1-Liner Problem Statement",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                // SizedBox(height: 6),
+                _buildTextFormField(
+                  controller: _oneLinerController,
+                  hint: "Briefly describe the problem",
+                ),
+            
+                // Detailed Problem
+                Text(
+                  "Detailed Problem",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                // SizedBox(height: 6),
+                _buildTextFormField(
+                  controller: _detailedProblemController,
+                  hint: "Provide a comprehensive description of the problem",
+                  maxLines: 5,
+                ),
+            
+                // Evidence Upload
+                _uploadBox(
+                  label: "Evidence of Problem",
+                  hint: "Upload market research, user feedback, etc.",
+                  icon: Icons.cloud_upload_outlined,
+                  fileName: _evidenceFile,
+                  onTap: () => _pickFile("evidence"),
+                ),
+            
+                // Product Description
+                Text(
+                  "Product Description",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 6),
+                _buildTextFormField(
+                  controller: _productDescriptionController,
+                  hint: "Describe your product or solution",
+                  maxLines: 4,
+                ),
+            
+                SizedBox(height: 30),
+            
+                // Pitch Deck & Video Pitch
+                _uploadBox(
+                  label: "Pitch Deck (PDF/PPT)",
+                  hint: "Tap to upload your Pitch Deck",
+                  icon: Icons.insert_drive_file_outlined,
+                  fileName: _pitchDeckFile,
+                  onTap: () => _pickFile("pitchDeck"),
+                ),
+                _uploadBox(
+                  label: "Video Pitch (MP4)",
+                  hint: "Tap to upload your Video Pitch",
+                  icon: Icons.play_circle_outline,
+                  fileName: _videoPitchFile,
+                  onTap: () => _pickFile("videoPitch"),
+                ),
+            
+                // Company Details
+                _uploadBox(
+                  label: "Company Logo (PNG/JPG)",
+                  hint: "Tap to upload your Logo",
+                  icon: Icons.insert_drive_file_outlined,
+                  fileName: _logo,
+                  onTap: () => _pickFile("logo"),
+                ),
+                Text(
+                  "Company Name",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 12),
+                _buildTextFormField(
+                  controller: _companyNameController,
+                  hint: "Company Name",
+                ),
+                SizedBox(height: 12),
+                Text(
+                  "Company TagLine",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 12),
+                _buildTextFormField(
+                  controller: _companyTaglineController,
+                  hint: "Company Tagline",
+                ),
+                SizedBox(height: 12),
+                _uploadBox(
+                  label: "Company visit Card",
+                  hint: "Tap to upload your Card",
+                  icon: Icons.insert_drive_file_outlined,
+                  fileName: _card,
+                  onTap: () => _pickFile("Card"),
+                ),
+            
+                SizedBox(height: 80),
+              ],
+            ),
           ),
         ),
       ),

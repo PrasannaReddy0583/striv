@@ -119,7 +119,7 @@ class _PostWidgetState extends State<PostWidget> {
       children: [
         /// Header
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: const EdgeInsets.only(left: 14, right: 14, bottom: 8),
           child: Row(
             children: [
               const CircleAvatar(
@@ -242,7 +242,15 @@ class _PostWidgetState extends State<PostWidget> {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+
+        Padding(
+          padding: EdgeInsetsGeometry.only(top: 4, left: 12, right: 12),
+          child: Text("2 June, 2023"),
+        ),
+
+        SizedBox(height: 12),
+        Divider(),
+        SizedBox(height: 12),
       ],
     );
   }

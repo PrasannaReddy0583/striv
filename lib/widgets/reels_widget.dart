@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:striv/pages/investor/full_screen_reel_page.dart';
+import 'package:striv/pages/pitch_details_screen.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelsWidget extends StatefulWidget {
@@ -67,7 +68,13 @@ class _ReelsWidgetState extends State<ReelsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: () => widget.startupid,
+                    onTap: () => Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) =>
+                            PitchDetailsScreen(pitchid: widget.startupid),
+                      ),
+                    ),
                     child: Text(
                       widget.startupName,
                       style: const TextStyle(
