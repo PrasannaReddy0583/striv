@@ -1357,7 +1357,7 @@ class ContentSection extends StatelessWidget {
         if (hasChart)
           Expanded(
             flex: 2,
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,

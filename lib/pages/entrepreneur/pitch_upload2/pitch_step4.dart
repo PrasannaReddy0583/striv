@@ -129,7 +129,7 @@ class _PitchFundScreenState extends State<PitchFundScreen> {
             border: Border.all(color: Colors.brown.shade200),
           ),
           child: DropdownButtonFormField<String>(
-            value: value,
+            initialValue: value,
             style: GoogleFonts.poppins(fontSize: 16, color: Colors.black87),
             decoration: const InputDecoration(border: InputBorder.none),
             items: items

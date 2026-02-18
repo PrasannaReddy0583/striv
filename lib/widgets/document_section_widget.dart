@@ -35,7 +35,7 @@ class DocumentSectionWidget extends StatelessWidget {
             document: document,
             onTap: () => onDocumentTap(document),
           ),
-        ).toList(),
+        ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.025),
       ],
     );

@@ -117,7 +117,7 @@ class _PitchFundScreenState extends State<PitchFundScreen> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           style: TextStyle(
             fontFamily: "Poppins",
             fontSize: 16,

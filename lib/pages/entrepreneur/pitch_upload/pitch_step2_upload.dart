@@ -101,7 +101,7 @@ class _MarketOpportunityFormState extends State<MarketOpportunityForm> {
         Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
         SizedBox(height: 6),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             filled: true,

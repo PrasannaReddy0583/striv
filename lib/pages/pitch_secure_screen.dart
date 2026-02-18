@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Pitch_secure extends StatefulWidget {
-  const Pitch_secure({Key? key}) : super(key: key);
+  const Pitch_secure({super.key});
 
   @override
   State<Pitch_secure> createState() => _PitchUploadScreenState();
@@ -295,7 +295,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
         ),
         value: value,
         onChanged: onChanged,
-        activeColor: const Color.fromARGB(255, 100, 88, 64),
+        activeThumbColor: const Color.fromARGB(255, 100, 88, 64),
       ),
     );
   }

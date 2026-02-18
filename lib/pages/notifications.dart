@@ -58,7 +58,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   void markAllRead() {
     setState(() {
-      for (var n in notifications) n.isUnread = false;
+      for (var n in notifications) {
+        n.isUnread = false;
+      }
     });
   }
 
@@ -236,7 +238,7 @@ class _NotificationCard extends StatelessWidget {
   final Color dotColor;
   final VoidCallback? onTap;
 
-  _NotificationCard({
+  const _NotificationCard({
     required this.item,
     required this.cardColor,
     required this.titleColor,

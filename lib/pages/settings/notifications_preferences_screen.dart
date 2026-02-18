@@ -179,7 +179,7 @@ class _NotificationPreferencesScreenState
   ) {
     return SwitchListTile(
       contentPadding: EdgeInsets.zero,
-      activeColor: AppColors.heading,
+      activeThumbColor: AppColors.heading,
       title: Text(text, style: AppTextStyles.cardTitle),
       value: value,
       onChanged: onChanged,

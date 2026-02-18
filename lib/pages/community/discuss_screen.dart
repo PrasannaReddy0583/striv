@@ -188,7 +188,7 @@ class PostCard extends StatelessWidget {
   final Function(String) onComment;
   final VoidCallback onShare;
 
-  PostCard({
+  const PostCard({
     super.key,
     required this.post,
     required this.onLike,

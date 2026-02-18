@@ -89,7 +89,7 @@ class _SecureDataRoomScreenState extends State<SecureDataRoomScreen> {
                       onDocumentTap: _onDocumentTap,
                     ),
                   )
-                  .toList(),
+                  ,
 
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
 

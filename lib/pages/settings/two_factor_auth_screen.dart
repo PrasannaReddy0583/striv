@@ -121,7 +121,7 @@ class _TwoFactorAuthScreenState extends State<TwoFactorAuthScreen> {
                     child: SwitchListTile(
                       title: Text("Enable 2FA", style: AppTextStyles.cardTitle),
                       value: _is2FAEnabled,
-                      activeColor: AppColors.accent,
+                      activeThumbColor: AppColors.accent,
                       onChanged: _toggle2FA,
                     ),
                   ),

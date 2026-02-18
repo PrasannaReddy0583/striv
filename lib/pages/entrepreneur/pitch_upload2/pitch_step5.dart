@@ -307,7 +307,7 @@ class _PitchUploadScreenState extends State<Pitch_secure> {
         ),
         value: value,
         onChanged: onChanged,
-        activeColor: Colors.brown.shade300,
+        activeThumbColor: Colors.brown.shade300,
       ),
     );
   }
