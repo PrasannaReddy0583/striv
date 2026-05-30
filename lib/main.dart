@@ -1,15 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:io';
 
-import 'package:striv/onboarding/splash/splash.dart';
+import 'package:striv/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:striv/features/chat/presentation/bloc/chat_bloc.dart';
+import 'package:striv/features/community/presentation/cubit/community_cubit.dart';
+import 'package:striv/features/discover/presentation/bloc/discover_bloc.dart';
+import 'package:striv/features/home/presentation/bloc/home_bloc.dart';
+import 'package:striv/features/navigation/cubit/navigation_cubit.dart';
+import 'package:striv/features/notifications/presentation/bloc/notifications_bloc.dart';
+import 'package:striv/features/pitch/presentation/bloc/pitch_upload_bloc.dart';
+import 'package:striv/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:striv/injection_container.dart';
+import 'package:striv/navigation.dart';
 import 'package:striv/utils/app_palette.dart';
 
-// Testing changes
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initDependencies();
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.white,
@@ -31,20 +43,34 @@ class StrivApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dealence',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Poppins",
-        scaffoldBackgroundColor: AppPalette.primaryBackground,
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.black,
-          selectionColor: Colors.grey,
-          selectionHandleColor: Colors.black,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(create: (_) => sl<AuthBloc>()),
+        BlocProvider<NavigationCubit>(create: (_) => sl<NavigationCubit>()),
+        BlocProvider<HomeBloc>(create: (_) => sl<HomeBloc>()),
+        BlocProvider<DiscoverBloc>(create: (_) => sl<DiscoverBloc>()),
+        BlocProvider<ChatBloc>(create: (_) => sl<ChatBloc>()),
+        BlocProvider<NotificationsBloc>(
+            create: (_) => sl<NotificationsBloc>()),
+        BlocProvider<CommunityCubit>(create: (_) => sl<CommunityCubit>()),
+        BlocProvider<SettingsCubit>(create: (_) => sl<SettingsCubit>()),
+        BlocProvider<PitchUploadBloc>(create: (_) => sl<PitchUploadBloc>()),
+      ],
+      child: MaterialApp(
+        title: 'Dealence',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "Poppins",
+          scaffoldBackgroundColor: AppPalette.primaryBackground,
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: Colors.black,
+            selectionColor: Colors.grey,
+            selectionHandleColor: Colors.black,
+          ),
+          useMaterial3: false,
         ),
-        useMaterial3: false,
+        home: const Navigation(),
       ),
-      home: GradientScaffold(child: SplashScreen()),
     );
   }
 }
